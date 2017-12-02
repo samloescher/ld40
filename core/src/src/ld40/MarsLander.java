@@ -12,6 +12,9 @@ public class MarsLander extends Game {
 
     public static MarsLander instance;
 
+    public static final int WIDTH  = 640;
+    public static final int HEIGHT = 480;
+
     public SpriteBatch batch;
     public ShapeRenderer shapeRenderer;
     public BitmapFont titleFont;

@@ -24,7 +24,7 @@ public class EndScreen extends AbstractScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        titleFont.draw(batch, "Game Over", 150, 320);
+        titleFont.draw(batch, "Game Over", MarsLander.WIDTH /2 - 160, MarsLander.HEIGHT / 2 + 50);
         batch.end();
     }
 
