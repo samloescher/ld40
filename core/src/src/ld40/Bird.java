@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 
@@ -39,7 +38,7 @@ public class Bird implements Pool.Poolable {
         }
     }
 
-    void decreseSpeed(){
+    void decreaseSpeed(){
         float currentSpeed = Math.abs(velocity.x);
         currentSpeed *= 0.999f;
         if (currentSpeed < slowestSpeed){
@@ -55,7 +54,7 @@ public class Bird implements Pool.Poolable {
 
     public void update(float delta){
         if(gliding){
-            decreseSpeed();
+            decreaseSpeed();
             bird.setY(bird.getY() - 4f * delta);
         }else{
             increaseSpeed();
