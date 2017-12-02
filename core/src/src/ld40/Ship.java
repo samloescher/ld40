@@ -10,7 +10,7 @@ public class Ship {
     private Sprite ship;
 
     public Ship() {
-        Texture shipTexture = new Texture(Gdx.files.internal("launch_stage/ship.png"));
+        Texture shipTexture = new Texture(Gdx.files.internal("sprites/ship.png"));
         ship = new Sprite(shipTexture);
         ship.setRotation(90);
         ship.setPosition(280, 100);
