@@ -1,6 +1,8 @@
 package src.ld40;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -12,25 +14,30 @@ public class MarsLander extends Game {
 
     public SpriteBatch batch;
     public ShapeRenderer shapeRenderer;
+    public BitmapFont titleFont;
+    public BitmapFont largeFont;
+    public BitmapFont normalFont;
+
     
     @Override
     public void create () {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
+        titleFont = new BitmapFont(Gdx.files.internal("fonts/title.fnt"), false);
+        largeFont = new BitmapFont(Gdx.files.internal("fonts/large.fnt"), false);
+        normalFont = new BitmapFont(Gdx.files.internal("fonts/normal.fnt"), false);
 
         instance = this;
 
         setScreen(new StartScreen());
-    }
-
-    @Override
-    public void render () {
-        super.render();
     }
     
     @Override
     public void dispose () {
         batch.dispose();
         shapeRenderer.dispose();
+        titleFont.dispose();
+        largeFont.dispose();
+        normalFont.dispose();
     }
 }
