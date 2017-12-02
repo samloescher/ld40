@@ -1,20 +1,52 @@
 package src.ld40.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
+import src.ld40.MarsLander;
+import src.ld40.Ship;
+
+import javax.xml.soap.Text;
 
 public class GameScreen extends AbstractScreen{
 
     private Texture backgroundImage;
 
+    private Ship ship;
+
+    private int peopleOnShip = 0;
+    private float timeSinceLastPersonGotOnShip = 0;
+    private float timeBetweenPeopleGettingOnShip = 1;
+
     public GameScreen(){
-        backgroundImage = new Texture(Gdx.files.internal("background.png"));
+        backgroundImage = new Texture(Gdx.files.internal("launch_stage/background.png"));
+        ship = new Ship();
     }
 
     @Override
     void update(float delta) {
+        timeSinceLastPersonGotOnShip += delta;
+        if (timeSinceLastPersonGotOnShip > timeBetweenPeopleGettingOnShip) {
+            peopleOnShip += 1;
+            timeSinceLastPersonGotOnShip = 0;
+            timeBetweenPeopleGettingOnShip = MathUtils.random(0.01f, 0.5f);
+        }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            MarsLander.instance.setScreen(new EndScreen());
+            dispose();
+        }
+    }
+
+    private int totalDigitsInNumber(int n) {
+        int numberOfDigits = 0;
+        while (n / 10 > 0) {
+            n /= 10;
+            numberOfDigits += 1;
+        }
+        return numberOfDigits;
     }
 
     @Override
@@ -27,11 +59,15 @@ public class GameScreen extends AbstractScreen{
 
         batch.begin();
         batch.draw(backgroundImage, 0, 0);
+        ship.draw(batch);
+        normalFont.draw(batch, "People on the ship : " + peopleOnShip, 640 - (200 + totalDigitsInNumber(peopleOnShip) * 10), 450);
+        largeFont.draw(batch, "Press space to launch !", 130, 80);
         batch.end();
     }
 
     @Override
     public void dispose() {
+        super.dispose();
         backgroundImage.dispose();
     }
 }
