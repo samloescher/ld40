@@ -42,8 +42,8 @@ public class GameScreen extends AbstractScreen{
 
     void addBird() {
         Bird b = birds.obtain();
-        float birdSpeed = MathUtils.random(50.0f, 100.0f);
-        b.init(MathUtils.random(300, 400), new Vector2(MathUtils.randomSign() * birdSpeed,0));
+        float birdSpeed = MathUtils.random(30.0f, 50.0f);
+        b.init(MathUtils.random(300, 450), new Vector2(MathUtils.randomSign() * birdSpeed,0));
         activeBirds.add(b);
     }
 
@@ -61,7 +61,7 @@ public class GameScreen extends AbstractScreen{
         if (timeSinceLastBirdSpawned > timeBetweenBirdSpawns) {
             addBird();
             timeSinceLastBirdSpawned = 0;
-            timeBetweenBirdSpawns = MathUtils.random(1f, 3f);
+            timeBetweenBirdSpawns = MathUtils.random(3f, 5f);
         }
 
         for (Bird b : activeBirds) {
