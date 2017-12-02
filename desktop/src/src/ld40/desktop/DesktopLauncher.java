@@ -5,8 +5,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import src.ld40.MarsLander;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new MarsLander(), config);
-	}
+    public static void main (String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.width = 640;
+        config.height = 480;
+        config.title = "Mars Lander";
+        config.resizable = false;
+        new LwjglApplication(new MarsLander(), config);
+    }
 }
