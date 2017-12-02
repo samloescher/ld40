@@ -61,7 +61,7 @@ public class GameScreen extends AbstractScreen{
         if (timeSinceLastBirdSpawned > timeBetweenBirdSpawns) {
             addBird();
             timeSinceLastBirdSpawned = 0;
-            timeBetweenBirdSpawns = MathUtils.random(3f, 5f);
+            timeBetweenBirdSpawns = MathUtils.random(5f, 7f);
         }
 
         for (Bird b : activeBirds) {
