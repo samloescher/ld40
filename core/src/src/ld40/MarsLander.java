@@ -16,6 +16,7 @@ public class MarsLander extends Game {
     public static final int HEIGHT = 480;
 
     public SpriteBatch batch;
+    public SpriteBatch ui;
     public ShapeRenderer shapeRenderer;
     public BitmapFont titleFont;
     public BitmapFont largeFont;
@@ -25,6 +26,7 @@ public class MarsLander extends Game {
     @Override
     public void create () {
         batch = new SpriteBatch();
+        ui = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         titleFont = new BitmapFont(Gdx.files.internal("fonts/title.fnt"), false);
         largeFont = new BitmapFont(Gdx.files.internal("fonts/large.fnt"), false);
@@ -38,6 +40,7 @@ public class MarsLander extends Game {
     @Override
     public void dispose () {
         batch.dispose();
+        ui.dispose();
         shapeRenderer.dispose();
         titleFont.dispose();
         largeFont.dispose();

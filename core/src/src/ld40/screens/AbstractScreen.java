@@ -10,6 +10,7 @@ import src.ld40.MarsLander;
 public abstract class AbstractScreen implements Screen {
 
     public static SpriteBatch batch = MarsLander.instance.batch;
+    public static SpriteBatch ui = MarsLander.instance.ui;
     public static ShapeRenderer shapeRenderer = MarsLander.instance.shapeRenderer;
     public static BitmapFont titleFont = MarsLander.instance.titleFont;
     public static BitmapFont largeFont = MarsLander.instance.largeFont;

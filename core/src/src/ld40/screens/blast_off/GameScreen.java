@@ -139,15 +139,6 @@ public class GameScreen extends AbstractScreen {
         dispose();
     }
 
-    private int totalDigitsInNumber(int n) {
-        int numberOfDigits = 0;
-        while (n / 10 > 0) {
-            n /= 10;
-            numberOfDigits += 1;
-        }
-        return numberOfDigits;
-    }
-
     @Override
     public void draw() {
         camera.update();
@@ -164,35 +155,36 @@ public class GameScreen extends AbstractScreen {
         }
         ship.draw(batch);
 
+        batch.end();
+
+        ui.begin();
         float SCREEN_BUFFER = 20;
         float ITEM_SIZE = 30;
         float ITEM_BUFFER = 10;
         String s = String.format("People on the ship : %5d", peopleOnShip);
-        normalFont.draw(batch, s,
+        normalFont.draw(ui, s,
                 SCREEN_BUFFER,
                 MarsLander.HEIGHT - SCREEN_BUFFER);
 
         s = String.format("Passenger Weight : %5d KG", (int)ship.passengerWeight);
-        normalFont.draw(batch, s,
+        normalFont.draw(ui, s,
                 SCREEN_BUFFER,
                 MarsLander.HEIGHT - SCREEN_BUFFER - ITEM_SIZE);
 
         s = String.format("Thrust : %3d %%", (int)ship.thrust);
-        normalFont.draw(batch, s,
+        normalFont.draw(ui, s,
                 SCREEN_BUFFER,
                 MarsLander.HEIGHT - SCREEN_BUFFER - 2*ITEM_SIZE - ITEM_BUFFER);
 
         s = String.format("Fuel : %3d %%", (int)ship.fuel);
-        normalFont.draw(batch, s,
+        normalFont.draw(ui, s,
                 SCREEN_BUFFER,
                 MarsLander.HEIGHT - SCREEN_BUFFER - 3*ITEM_SIZE - ITEM_BUFFER);
-
-
-
         if (!shipLaunched) {
-            largeFont.draw(batch, "Press space to launch !", 130, 80);
+            largeFont.draw(ui, "Press space to launch !", 130, 80);
         }
-        batch.end();
+
+        ui.end();
     }
 
     @Override
