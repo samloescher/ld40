@@ -176,7 +176,7 @@ public class GameScreen extends AbstractScreen {
         float SCREEN_BUFFER = 20;
         float ITEM_SIZE = 30;
         float ITEM_BUFFER = 10;
-        String s = String.format("People on the ship : %5d", peopleOnShip);
+        String s = String.format("Passengers on the ship : %5d", peopleOnShip);
         normalFont.draw(ui, s,
                 SCREEN_BUFFER,
                 MarsLander.HEIGHT - SCREEN_BUFFER);
@@ -211,6 +211,8 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void dispose() {
         super.dispose();
+        ship.dispose();
         backgroundImage.dispose();
+        starfield.dispose();
     }
 }

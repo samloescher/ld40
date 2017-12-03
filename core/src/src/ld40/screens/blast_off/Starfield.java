@@ -38,4 +38,10 @@ public class Starfield {
             particleEffect.draw(batch);
         }
     }
+
+    public void dispose(){
+        for (ParticleEffect particleEffect : starFields) {
+            particleEffect.dispose();
+        }
+    }
 }

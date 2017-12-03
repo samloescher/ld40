@@ -1,6 +1,7 @@
 package src.ld40.screens.blast_off;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,8 +11,9 @@ import com.badlogic.gdx.math.Vector2;
 public class Ship {
 
     private Sprite ship;
-
     private Exhaust exhaust;
+    private Sound lowFuelSound;
+    private long lowFuelSoundId;
 
     public float thrust = 0;
     public float passengerWeight = 0;
@@ -38,6 +40,9 @@ public class Ship {
         thrust = GRAVITY;
         velocity = new Vector2();
         exhaust = new Exhaust();
+        lowFuelSound = Gdx.audio.newSound(Gdx.files.internal("sound/low_fuel.wav"));
+        lowFuelSoundId = lowFuelSound.play(0f);
+        lowFuelSound.setLooping(lowFuelSoundId, true  );
     }
 
     public void launch() {
@@ -61,6 +66,12 @@ public class Ship {
         if (fuel > 0) {
             thrust += 1;
             fuel -= 0.05f;
+            if(fuel < 20f){
+                lowFuelSound.setVolume(lowFuelSoundId, 1f);
+            }
+            if(fuel == 0){
+                lowFuelSound.setVolume(lowFuelSoundId, 0f);
+            }
 
             thrust = MathUtils.clamp(thrust, MIN_THRUST, MAX_THRUST);
             if (fuel < 0) {
@@ -121,5 +132,11 @@ public class Ship {
     public void draw(SpriteBatch batch) {
         ship.draw(batch);
         exhaust.draw(batch);
+    }
+
+    public void dispose(){
+        exhaust.dispose();
+        ship.getTexture().dispose();
+        lowFuelSound.dispose();
     }
 }

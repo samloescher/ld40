@@ -2,10 +2,18 @@ package src.ld40.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import src.ld40.MarsLander;
 
 public class EndScreen extends AbstractScreen {
+
+    private Sound sound;
+
+    public EndScreen() {
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound/explosion.wav"));
+        sound.play();
+    }
 
     @Override
     public void update(float delta) {
@@ -28,6 +36,6 @@ public class EndScreen extends AbstractScreen {
     @Override
     public void dispose() {
         super.dispose();
-
+        sound.dispose();
     }
 }

@@ -2,15 +2,19 @@ package src.ld40.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import src.ld40.MarsLander;
 
 public class WinScreen extends AbstractScreen {
 
-    int livesSaved;
+    private int livesSaved;
+    private Sound sound;
 
     public WinScreen(int people) {
         livesSaved = people;
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound/success.wav"));
+        sound.play();
     }
 
     @Override
@@ -47,6 +51,6 @@ public class WinScreen extends AbstractScreen {
     @Override
     public void dispose() {
         super.dispose();
-
+        sound.dispose();
     }
 }

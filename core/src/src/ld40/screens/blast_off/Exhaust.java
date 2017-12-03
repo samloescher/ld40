@@ -1,6 +1,7 @@
 package src.ld40.screens.blast_off;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,9 +15,16 @@ public class Exhaust {
 
     private float currentScale;
 
+    private Sound sound;
+    private long soundId;
+
     public Exhaust() {
         particleEffect = new ParticleEffect();
         particleEffect.load(Gdx.files.internal("exhaust.particle"), Gdx.files.internal(""));
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound/exhaust.wav"));
+        soundId = sound.play();
+        sound.setLooping(soundId, true);
+        sound.setVolume(soundId, 0f);
         currentScale = 1f;
     }
 
@@ -28,6 +36,7 @@ public class Exhaust {
         particleEffect.scaleEffect(scale);
         currentScale *= scale;
         particleEffect.start();
+        sound.setVolume(soundId,  currentScale * 0.5f);
     }
 
     public void moveTo(float x, float y) {
@@ -49,6 +58,11 @@ public class Exhaust {
 
     public void draw(SpriteBatch batch) {
         particleEffect.draw(batch);
+    }
+
+    public void dispose(){
+        particleEffect.dispose();
+        sound.dispose();
     }
 
 }
