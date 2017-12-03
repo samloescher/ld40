@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
+import net.dermetfan.gdx.physics.box2d.PositionController;
 import src.ld40.MarsLander;
 import src.ld40.screens.AbstractScreen;
 import src.ld40.screens.EndScreen;
@@ -28,6 +29,11 @@ public class GameScreen extends AbstractScreen {
 
     private float timeSinceLastBirdSpawned = 0;
     private float timeBetweenBirdSpawns = 1;
+
+    private float CAMERA_BUFFER = 100f;
+    private float CAMERA_LOWER_THRESHOLD = MarsLander.HEIGHT/2f - CAMERA_BUFFER/2f;
+    private float CAMERA_UPPER_THRESHOLD = MarsLander.HEIGHT/2f + CAMERA_BUFFER/2f;
+    private boolean cameraFollowingShip = false;
 
     public GameScreen() {
         backgroundImage = new Texture(Gdx.files.internal("launch_stage/background.png"));
@@ -53,6 +59,24 @@ public class GameScreen extends AbstractScreen {
         activeBirds.add(b);
     }
 
+    void updateCamera(float height){
+        boolean updateCamera = false;
+        float cameraHeight = camera.position.y + camera.viewportHeight/2;
+        if (cameraHeight > CAMERA_UPPER_THRESHOLD + height){
+            float dy = CAMERA_UPPER_THRESHOLD + height - camera.viewportHeight/2;
+            camera.position.y = dy;
+            updateCamera = true;
+        } else if(cameraHeight < CAMERA_LOWER_THRESHOLD + height){
+            float dy = CAMERA_LOWER_THRESHOLD + height - camera.viewportHeight/2;
+            camera.position.y = dy;
+            updateCamera = true;
+        }
+
+        if(updateCamera) {
+            camera.update();
+        }
+    }
+
     @Override
     public void update(float delta) {
         timeSinceLastPersonGotOnShip += delta;
@@ -76,7 +100,11 @@ public class GameScreen extends AbstractScreen {
             b.update(delta);
         }
 
-        // TODO : check collisions
+        if (shipLaunched){
+            if(ship.isCollidingWithGround()){
+                gameOver();
+            }
+        }
 
         if (!shipLaunched) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -94,9 +122,16 @@ public class GameScreen extends AbstractScreen {
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 ship.steerRight();
             }
+
+
+            if(ship.getHeight() > CAMERA_LOWER_THRESHOLD) {
+                cameraFollowingShip = true;
+            }
         }
 
-
+        if(cameraFollowingShip){
+            updateCamera(ship.getHeight());
+        }
     }
 
     private void gameOver() {

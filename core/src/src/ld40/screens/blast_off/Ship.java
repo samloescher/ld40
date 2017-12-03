@@ -27,7 +27,7 @@ public class Ship {
 
     private float GROUND_Y = 100;
 
-    boolean launched = false;
+    private boolean launched = false;
 
     public Ship() {
         Texture shipTexture = new Texture(Gdx.files.internal("sprites/ship/ship.png"));
@@ -44,19 +44,32 @@ public class Ship {
         launched = true;
     }
 
+    public boolean isCollidingWithGround(){
+        return ship.getY() < GROUND_Y;
+    }
+
+    public float getHeight() {
+        return ship.getY();
+    }
+
     public void decreaseThrust() {
         thrust -= 0.5;
         thrust = MathUtils.clamp(thrust, MIN_THRUST, MAX_THRUST);
     }
 
     public void increaseThrust() {
-        thrust += 1;
-        fuel -= 0.05f;
+        if (fuel > 0) {
+            thrust += 1;
+            fuel -= 0.05f;
 
-        thrust = MathUtils.clamp(thrust, MIN_THRUST, MAX_THRUST);
+            thrust = MathUtils.clamp(thrust, MIN_THRUST, MAX_THRUST);
+            if (fuel < 0) {
+                fuel = 0f;
+            }
+        }
     }
 
-    private float gravity(){
+    private float gravity() {
         return GRAVITY * (SHIP_WEIGHT + passengerWeight);
     }
 
@@ -74,7 +87,7 @@ public class Ship {
         exhaust.setRotation(newRotation);
     }
 
-    private void setVelocityUnscaledRotation(){
+    private void setVelocityUnscaledRotation() {
         float rotation = MathUtils.degreesToRadians * ship.getRotation();
         velocity.x = MathUtils.cos(rotation);
         velocity.y = MathUtils.sin(rotation);
@@ -92,7 +105,7 @@ public class Ship {
             velocity.y -= gravity();
 
         } else {
-            if (thrust * THRUST_SCALE_FACTOR > gravity()){
+            if (thrust * THRUST_SCALE_FACTOR > gravity()) {
                 velocity.x = 0;
                 velocity.y = thrust * THRUST_SCALE_FACTOR;
                 velocity.y -= gravity();
@@ -100,7 +113,7 @@ public class Ship {
         }
 
         ship.setPosition(ship.getX() + velocity.x, ship.getY() + velocity.y);
-        exhaust.moveTo(ship.getX() + ship.getWidth()/2, ship.getY() + 5);
+        exhaust.moveTo(ship.getX() + ship.getWidth() / 2, ship.getY() + 5);
         exhaust.emit(thrust);
         exhaust.update(delta);
     }
