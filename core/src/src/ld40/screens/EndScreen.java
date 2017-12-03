@@ -17,15 +17,12 @@ public class EndScreen extends AbstractScreen {
 
     @Override
     public void draw() {
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-
-        Gdx.gl.glClearColor(0.2f, 0.1f, 0.1f, 1);
+        Gdx.gl.glClearColor(0.4f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        titleFont.draw(batch, "Game Over", MarsLander.WIDTH /2 - 160, MarsLander.HEIGHT / 2 + 50);
-        batch.end();
+        ui.begin();
+        titleFont.draw(ui, "Mission Disaster!", 50, MarsLander.HEIGHT / 2 + 50);
+        ui.end();
     }
 
     @Override

@@ -14,15 +14,14 @@ public class Exhaust {
 
     private float currentScale;
 
-    public Exhaust (){
+    public Exhaust() {
         particleEffect = new ParticleEffect();
-        particleEffect.load(Gdx.files.internal("exhaust.particle"),Gdx.files.internal(""));
-        particleEffect.getEmitters().first().setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        particleEffect.load(Gdx.files.internal("exhaust.particle"), Gdx.files.internal(""));
         currentScale = 1f;
     }
 
-    public void emit(float strength){
-        if(strength == 0){
+    public void emit(float strength) {
+        if (strength == 0) {
             return;
         }
         float scale = (1f / currentScale) * strength / 100f;
@@ -31,25 +30,24 @@ public class Exhaust {
         particleEffect.start();
     }
 
-    public void moveTo(float x, float y){
+    public void moveTo(float x, float y) {
         particleEffect.setPosition(x, y);
     }
 
-    public void setRotation(float rotation){
+    public void setRotation(float rotation) {
         Array<ParticleEmitter> emitters = particleEffect.getEmitters();
-        for (ParticleEmitter emitter: emitters){
+        for (ParticleEmitter emitter : emitters) {
             ParticleEmitter.ScaledNumericValue v = emitter.getAngle();
             v.setHigh(rotation - MIN_DISPERSION_ANGLE_DEGREES, rotation + MIN_DISPERSION_ANGLE_DEGREES);
             v.setLow(rotation - MAX_DISPERSION_ANGLE_DEGREES, rotation + MAX_DISPERSION_ANGLE_DEGREES);
         }
     }
 
-
-    public void update(float delta){
+    public void update(float delta) {
         particleEffect.update(delta);
     }
 
-    public void draw(SpriteBatch batch){
+    public void draw(SpriteBatch batch) {
         particleEffect.draw(batch);
     }
 

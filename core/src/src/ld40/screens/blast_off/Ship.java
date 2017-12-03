@@ -18,10 +18,10 @@ public class Ship {
     public float fuel = 100;
 
     private float SHIP_WEIGHT = 100000;
-    private float THRUST_SCALE_FACTOR = 0.1f;
     private float GRAVITY = 0.00008f;
     private float MIN_THRUST = 0f;
     private float MAX_THRUST = 100f;
+    private float THRUST_SCALE_FACTOR = 0.11f;
 
     private Vector2 velocity;
 

@@ -11,6 +11,7 @@ import net.dermetfan.gdx.physics.box2d.PositionController;
 import src.ld40.MarsLander;
 import src.ld40.screens.AbstractScreen;
 import src.ld40.screens.EndScreen;
+import src.ld40.screens.WinScreen;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class GameScreen extends AbstractScreen {
     private Ship ship;
     private Pool<Bird> birds;
     private ArrayList<Bird> activeBirds;
+    private Starfield starfield;
 
     private boolean shipLaunched = false;
     private int peopleOnShip = 0;
@@ -30,13 +32,15 @@ public class GameScreen extends AbstractScreen {
     private float timeSinceLastBirdSpawned = 0;
     private float timeBetweenBirdSpawns = 1;
 
-    private float CAMERA_BUFFER = 100f;
-    private float CAMERA_LOWER_THRESHOLD = MarsLander.HEIGHT/2f - CAMERA_BUFFER/2f;
-    private float CAMERA_UPPER_THRESHOLD = MarsLander.HEIGHT/2f + CAMERA_BUFFER/2f;
+    private float CAMERA_BUFFER = 50f;
     private boolean cameraFollowingShip = false;
+
+    private float EXIT_HEIGHT = 4500;
+    private float MAX_CAMERA_HEIGHT = EXIT_HEIGHT - CAMERA_BUFFER / 2;
 
     public GameScreen() {
         backgroundImage = new Texture(Gdx.files.internal("launch_stage/background.png"));
+        starfield = new Starfield(2600, EXIT_HEIGHT);
         ship = new Ship();
         birds = new Pool<Bird>() {
             @Override
@@ -55,25 +59,25 @@ public class GameScreen extends AbstractScreen {
     void addBird() {
         Bird b = birds.obtain();
         float birdSpeed = MathUtils.random(30.0f, 50.0f);
-        b.init(MathUtils.random(300, 450), new Vector2(MathUtils.randomSign() * birdSpeed, 0));
+        b.init(MathUtils.random(300, 600), new Vector2(MathUtils.randomSign() * birdSpeed, 0));
         activeBirds.add(b);
     }
 
-    void updateCamera(float height){
-        boolean updateCamera = false;
-        float cameraHeight = camera.position.y + camera.viewportHeight/2;
-        if (cameraHeight > CAMERA_UPPER_THRESHOLD + height){
-            float dy = CAMERA_UPPER_THRESHOLD + height - camera.viewportHeight/2;
-            camera.position.y = dy;
-            updateCamera = true;
-        } else if(cameraHeight < CAMERA_LOWER_THRESHOLD + height){
-            float dy = CAMERA_LOWER_THRESHOLD + height - camera.viewportHeight/2;
-            camera.position.y = dy;
-            updateCamera = true;
-        }
+    float getCameraHeight() {
+        return camera.position.y;
+    }
 
-        if(updateCamera) {
-            camera.update();
+    void setCameraHeight(float height) {
+        height = MathUtils.clamp(height, MarsLander.HEIGHT / 2f, MAX_CAMERA_HEIGHT - MarsLander.HEIGHT / 2f);
+        camera.position.y = height;
+        camera.update();
+    }
+
+    void updateCamera(float shipHeight) {
+        if (getCameraHeight() > shipHeight + CAMERA_BUFFER) {
+            setCameraHeight(shipHeight + CAMERA_BUFFER);
+        } else if (getCameraHeight() < shipHeight - CAMERA_BUFFER) {
+            setCameraHeight(shipHeight - CAMERA_BUFFER);
         }
     }
 
@@ -85,25 +89,29 @@ public class GameScreen extends AbstractScreen {
         if (timeSinceLastPersonGotOnShip > timeBetweenPeopleGettingOnShip && !shipLaunched) {
             addPerson();
             timeSinceLastPersonGotOnShip = 0;
-            timeBetweenPeopleGettingOnShip = MathUtils.random(0.01f, 0.5f);
+            timeBetweenPeopleGettingOnShip = MathUtils.random(0.1f, 5f);
         }
 
         if (timeSinceLastBirdSpawned > timeBetweenBirdSpawns) {
             addBird();
             timeSinceLastBirdSpawned = 0;
-            timeBetweenBirdSpawns = MathUtils.random(5f, 7f);
+            timeBetweenBirdSpawns = MathUtils.random(4f, 6f);
         }
 
+        starfield.update(delta);
         ship.update(delta);
 
         for (Bird b : activeBirds) {
             b.update(delta);
         }
 
-        if (shipLaunched){
-            if(ship.isCollidingWithGround()){
+        if (shipLaunched) {
+            if (ship.isCollidingWithGround()) {
                 gameOver();
             }
+        }
+        if (ship.getHeight() > EXIT_HEIGHT) {
+            win();
         }
 
         if (!shipLaunched) {
@@ -124,14 +132,19 @@ public class GameScreen extends AbstractScreen {
             }
 
 
-            if(ship.getHeight() > CAMERA_LOWER_THRESHOLD) {
+            if (ship.getHeight() > getCameraHeight()) {
                 cameraFollowingShip = true;
             }
         }
 
-        if(cameraFollowingShip){
+        if (cameraFollowingShip) {
             updateCamera(ship.getHeight());
         }
+    }
+
+    private void win() {
+        MarsLander.instance.setScreen(new WinScreen(peopleOnShip));
+        dispose();
     }
 
     private void gameOver() {
@@ -144,7 +157,7 @@ public class GameScreen extends AbstractScreen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
+        Gdx.gl.glClearColor(0.5f, 0.9f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
@@ -153,6 +166,8 @@ public class GameScreen extends AbstractScreen {
         for (Bird b : activeBirds) {
             b.draw(batch);
         }
+
+        starfield.draw(batch);
         ship.draw(batch);
 
         batch.end();
@@ -166,20 +181,26 @@ public class GameScreen extends AbstractScreen {
                 SCREEN_BUFFER,
                 MarsLander.HEIGHT - SCREEN_BUFFER);
 
-        s = String.format("Passenger Weight : %5d KG", (int)ship.passengerWeight);
+        s = String.format("Passenger Weight : %5d KG", (int) ship.passengerWeight);
         normalFont.draw(ui, s,
                 SCREEN_BUFFER,
                 MarsLander.HEIGHT - SCREEN_BUFFER - ITEM_SIZE);
 
-        s = String.format("Thrust : %3d %%", (int)ship.thrust);
+        s = String.format("Thrust : %3d %%", (int) ship.thrust);
         normalFont.draw(ui, s,
                 SCREEN_BUFFER,
-                MarsLander.HEIGHT - SCREEN_BUFFER - 2*ITEM_SIZE - ITEM_BUFFER);
+                MarsLander.HEIGHT - SCREEN_BUFFER - 2 * ITEM_SIZE - ITEM_BUFFER);
 
-        s = String.format("Fuel : %3d %%", (int)ship.fuel);
+        s = String.format("Fuel : %3d %%", (int) ship.fuel);
         normalFont.draw(ui, s,
                 SCREEN_BUFFER,
-                MarsLander.HEIGHT - SCREEN_BUFFER - 3*ITEM_SIZE - ITEM_BUFFER);
+                MarsLander.HEIGHT - SCREEN_BUFFER - 3 * ITEM_SIZE - ITEM_BUFFER);
+
+//        s = String.format("Altitude : %3d", (int) ship.getHeight() - 100);
+//        normalFont.draw(ui, s,
+//                SCREEN_BUFFER,
+//                MarsLander.HEIGHT - SCREEN_BUFFER - 4 * ITEM_SIZE - ITEM_BUFFER);
+
         if (!shipLaunched) {
             largeFont.draw(ui, "Press space to launch !", 130, 80);
         }
