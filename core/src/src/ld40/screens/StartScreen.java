@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import src.ld40.MarsLander;
+import src.ld40.screens.blast_off.GameScreen;
 
 public class StartScreen extends AbstractScreen {
 
@@ -15,7 +16,7 @@ public class StartScreen extends AbstractScreen {
     }
 
     @Override
-    void update(float delta) {
+    public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             MarsLander.instance.setScreen(new GameScreen());
             dispose();
@@ -23,7 +24,7 @@ public class StartScreen extends AbstractScreen {
     }
 
     @Override
-    void draw() {
+    public void draw() {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 

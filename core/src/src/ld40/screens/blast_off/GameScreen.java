@@ -1,4 +1,4 @@
-package src.ld40.screens;
+package src.ld40.screens.blast_off;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
-import src.ld40.Bird;
 import src.ld40.MarsLander;
-import src.ld40.Ship;
+import src.ld40.screens.AbstractScreen;
+import src.ld40.screens.EndScreen;
 
 import java.util.ArrayList;
 
@@ -54,7 +54,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     @Override
-    void update(float delta) {
+    public void update(float delta) {
         timeSinceLastPersonGotOnShip += delta;
         timeSinceLastBirdSpawned += delta;
 
@@ -114,7 +114,7 @@ public class GameScreen extends AbstractScreen {
     }
 
     @Override
-    void draw() {
+    public void draw() {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 

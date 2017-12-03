@@ -8,7 +8,7 @@ import src.ld40.MarsLander;
 public class EndScreen extends AbstractScreen {
 
     @Override
-    void update(float delta) {
+    public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             MarsLander.instance.setScreen(new StartScreen());
             dispose();
@@ -16,7 +16,7 @@ public class EndScreen extends AbstractScreen {
     }
 
     @Override
-    void draw() {
+    public void draw() {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 

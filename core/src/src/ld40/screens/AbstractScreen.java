@@ -22,8 +22,8 @@ public abstract class AbstractScreen implements Screen {
         camera.setToOrtho(false);
     }
 
-    abstract void update(float delta);
-    abstract void draw();
+    public abstract void update(float delta);
+    public abstract void draw();
 
     @Override
     public final void render(float delta) {

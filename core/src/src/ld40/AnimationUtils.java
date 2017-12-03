@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AnimationUtils {
-    static TextureRegion[] getAnimationTextureRegionArray(Texture tex, int frames, int frameWidth, boolean reverse){
+    public static TextureRegion[] getAnimationTextureRegionArray(Texture tex, int frames, int frameWidth, boolean reverse){
         TextureRegion tmp;
         TextureRegion[] array;
         int height = tex.getHeight();

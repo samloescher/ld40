@@ -1,4 +1,4 @@
-package src.ld40;
+package src.ld40.screens.blast_off;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

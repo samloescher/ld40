@@ -1,4 +1,4 @@
-package src.ld40;
+package src.ld40.screens.blast_off;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
+import src.ld40.AnimationUtils;
+import src.ld40.MarsLander;
 
 public class Bird implements Pool.Poolable {
 
