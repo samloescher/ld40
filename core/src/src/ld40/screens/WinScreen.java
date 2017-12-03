@@ -9,12 +9,12 @@ import src.ld40.MarsLander;
 public class WinScreen extends AbstractScreen {
 
     private int livesSaved;
-    private Sound sound;
+    //private Sound sound;
 
     public WinScreen(int people) {
         livesSaved = people;
-        sound = Gdx.audio.newSound(Gdx.files.internal("sound/success.wav"));
-        sound.play();
+        //sound = Gdx.audio.newSound(Gdx.files.internal("sound/success.wav"));
+        //sound.play();
     }
 
     @Override
@@ -51,6 +51,6 @@ public class WinScreen extends AbstractScreen {
     @Override
     public void dispose() {
         super.dispose();
-        sound.dispose();
+        //sound.dispose();
     }
 }

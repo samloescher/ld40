@@ -28,7 +28,7 @@ public class StartScreen extends AbstractScreen {
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             if (titleProgress == 5) {
-                MarsLander.instance.setScreen(new WinScreen(4));
+                MarsLander.instance.setScreen(new GameScreen());
                 dispose();
             } else {
                 titleProgress++;

@@ -2,6 +2,8 @@ package src.ld40.screens.blast_off;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -23,6 +25,7 @@ public class GameScreen extends AbstractScreen {
     private Pool<Bird> birds;
     private ArrayList<Bird> activeBirds;
     private Starfield starfield;
+    private Sound passengerOnBoardSound;
 
     private boolean shipLaunched = false;
     private int peopleOnShip = 0;
@@ -49,11 +52,13 @@ public class GameScreen extends AbstractScreen {
             }
         };
         activeBirds = new ArrayList<Bird>();
+        passengerOnBoardSound = Gdx.audio.newSound(Gdx.files.internal("sound/passenger_onboard.wav"));
     }
 
     void addPerson() {
         peopleOnShip += 1;
         ship.passengerWeight += MathUtils.random(50, 110);
+        passengerOnBoardSound.play();
     }
 
     void addBird() {
@@ -214,5 +219,6 @@ public class GameScreen extends AbstractScreen {
         ship.dispose();
         backgroundImage.dispose();
         starfield.dispose();
+        passengerOnBoardSound.dispose();
     }
 }
