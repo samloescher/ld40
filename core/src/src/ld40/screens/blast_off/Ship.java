@@ -70,7 +70,7 @@ public class Ship {
     }
 
     private float gravity() {
-        return GRAVITY * (SHIP_WEIGHT + passengerWeight);
+        return GRAVITY * (SHIP_WEIGHT + 10 * passengerWeight);
     }
 
     public void steerLeft() {

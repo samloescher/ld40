@@ -18,7 +18,7 @@ public class StartScreen extends AbstractScreen {
     @Override
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            MarsLander.instance.setScreen(new EndScreen());
+            MarsLander.instance.setScreen(new GameScreen());
             dispose();
         }
     }
